@@ -306,11 +306,10 @@ class IabtcfConsentInfo {
   static late final instance = IabtcfConsentInfo._();
 
   // ignore: close_sinks
-  late final _consentInfo = ReplaySubject<BasicConsentInfo?>(
-    maxSize: 1,
-    onListen: _onConsentInfoListen,
-    onCancel: _onConsentInfoCancel,
-  );
+  late final _consentInfo = BehaviorSubject<BasicConsentInfo?>(
+      onListen: _onConsentInfoListen,
+      onCancel: _onConsentInfoCancel,
+      sync: true);
 
   late StreamSubscription<void> _rawConsentInfoSub;
 
@@ -343,7 +342,7 @@ class IabtcfConsentInfo {
   /// If the GDPR does not apply or whether it does has not been determined yet
   /// [BasicConsentInfo] is returned. If the full consent info is available
   /// [ConsentInfo] is returned.
-  Future<BasicConsentInfo?> currentConsentInfo() => consentInfo().first;
+  Future<BasicConsentInfo?> currentConsentInfo() => consentInfo().last;
 }
 
 extension _ValueExt<T> on T {
